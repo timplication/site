@@ -8,7 +8,7 @@ compile_sass = true
 build_search_index = true
 
 # The site theme to use.
-theme = "zola.386"
+# theme = "zola.386"
 
 # The title of the website
 title = "Tim Baccaert"

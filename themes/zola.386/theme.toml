@@ -1,9 +1,0 @@
-name = "custom-zola.386"
-description = "adaptation of lopes/zola.386"
-license = "MIT"
-homepage = "https://github.com/lopes/zola.386"
-min_version = "0.0.1"
-demo = "https://zola386.netlify.com"
-
-[author]
-name = "Tim Baccaert"
