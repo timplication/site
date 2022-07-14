@@ -241,7 +241,7 @@ body {
 .center-content {
     max-width: 1168px;
     margin: 0 auto;
-    padding: 0;
+    padding: 1em;
 }
 
 a {
@@ -851,8 +851,9 @@ h4 small {
 
 .page-header {
   padding: 20px 20px;
-  margin: 20px 0 20px;
-  background: #00aaaa;
+  margin: 0 0 20px;
+  /* background: #00aaaa; */
+  background: #0AA;
 }
 
 .page-header .main-info {
@@ -876,13 +877,13 @@ h4 small {
 }
 
 .page-header .main-info-text .contact-info {
-    color: #515151;
+    color: #000000;
     padding: 0.75em 0em 0em 0em;
     margin: 0;
 }
 
 .page-header .description {
-    color: #515151;
+    color: #000000;
     padding: 2em 0em 0em 0em;
     margin: 0;
 }
