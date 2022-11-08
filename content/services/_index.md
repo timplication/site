@@ -1,4 +1,4 @@
 +++
 title = "Teaching"
-weight = 3
+weight = 4
 +++

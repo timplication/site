@@ -1,4 +1,4 @@
 +++
-title = "Conference Papers"
+title = "Conference Articles"
 weight = 0
 +++

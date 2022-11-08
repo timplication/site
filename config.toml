@@ -7,15 +7,8 @@ compile_sass = true
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = true
 
-# The site theme to use.
-# theme = "zola.386"
-
 # The title of the website
 title = "Tim Baccaert"
-
-# description = """I started my Ph.D. in October 2021 under the guidance of [Bas
-# Ketsman](http://basketsman.com). The focus of
-# my research is distributed query processing with formal guarantees."""
 
 taxonomies = []
 
@@ -30,10 +23,10 @@ keywords = ""
 author = "Tim Baccaert"
 year = 2022
 job = "Ph.D. Student"
-department = "Department of Computer Science (SOFT Lab)"
+department = "Department of Computer Science"
 university = "Vrije Universiteit Brussel"
 email = "tim.baccaert@vub.be"
 address = "Pleinlaan 2, 1050 Brussels, Belgium"
-office = "F.10.744"
+office = "F.10.735"
 github = "timplication"
 orcid = "0000-0002-7115-204X"
