@@ -29,6 +29,9 @@
                     <td class="title">{{ config.extra.job }}</td>
                 </tr>
                 <tr>
+                    <td>{{ config.extra.lab}}</td>
+                </tr>
+                <tr>
                     <td>{{ config.extra.department }}</td>
                 </tr>
                 <tr>
@@ -98,21 +101,15 @@
                     <table class="one-column">
                         <tr>
                             <td class="title">
-                                {% if bibitem.tags.url %}
-                                <a class="bib-item-title" href="{{bibitem.tags.url}}" target="_blank">
-                                    {{bibitem.tags.title }}
-                                </a>
-                                {% else %}
-                                    {{bibitem.tags.title }}
-                                {% endif %}
+                                {{bibitem.tags.title }}
                             </td>
                         </tr>
-                        {% if subsect.path == "/conf/" %}
+                        {% if subsect.path is matching("^/(conf|pres).*") and bibitem.entry_type is not matching("patent|article") %}
+                        {% if bibitem.tags.eventtitleaddon and bibitem.tags.booktitle %}
                         <tr>
                             <td><strong>{{bibitem.tags.eventtitleaddon}}</strong> - {{bibitem.tags.booktitle}}</td>
                         </tr>
                         {% endif %}
-                        {% if bibitem.tags.venue and bibitem.tags.eventdate %}
                         <tr>
                             <td>
                                 📍 {{bibitem.tags.venue}} &nbsp; 🗓️
@@ -129,7 +126,8 @@
                     </table>
 
                     <table class="two-column">
-                        {% if subsect.path == "/conf/" %}
+                        {% if subsect.path == "/conf/" and bibitem.entry_type == "inproceedings"
+                        and bibitem.tags.editor %}
                         <tr>
                             <td>Editor{{ bibitem.tags.editor | split(pat=", ") | length | pluralize }}</td>
                             <td>
@@ -163,6 +161,34 @@
                         <tr>
                             <td>Assignee</td>
                             <td>{{ bibitem.tags.assignee }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if bibitem.tags.url or bibitem.tags.slides %}
+                        <tr class="links">
+                            {% if bibitem.tags.url and bibitem.tags.slides or bibitem.tags.poster %}
+                            <td>Links</td>
+                            {% else %}
+                            <td>Link</td>
+                            {% endif %}
+                            {% if subsect.path == "/presentations/" %}
+                            <td>
+                                <a href={{bibitem.tags.url}}  target="_blank">🛝  <strong>Slides</strong></a>
+                            </td>
+                            {% elif subsect.path == "/conf/" and bibitem.entry_type == "patent" %}
+                            <td>
+                                <a href={{bibitem.tags.url}}  target="_blank">📜 <strong>Patent</strong></a>
+                            </td>
+                            {% elif subsect.path == "/conf/" and bibitem.entry_type == "inproceedings" %}
+                            <td>
+                                <a href={{bibitem.tags.url}}  target="_blank">📄 <strong>Paper</strong></a>
+                                {% if bibitem.tags.slides %}
+                                <a href={{bibitem.tags.slides}}  target="_blank">🛝  <strong>Slides</strong></a>
+                                {% endif %}
+                                {% if bibitem.tags.poster %}
+                                <a href={{bibitem.tags.poster}}  target="_blank">📈 <strong>Poster</strong></a>
+                                {% endif %}
+                            </td>
+                            {% endif %}
                         </tr>
                         {% endif %}
                     </table>
