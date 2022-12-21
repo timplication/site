@@ -180,7 +180,9 @@
                             </td>
                             {% elif subsect.path == "/conf/" and bibitem.entry_type == "inproceedings" %}
                             <td>
+                                {% if bibitem.tags.url %}
                                 <a href={{bibitem.tags.url}}  target="_blank">📄 <strong>Paper</strong></a>
+                                {% endif %}
                                 {% if bibitem.tags.slides %}
                                 <a href={{bibitem.tags.slides}}  target="_blank">🛝  <strong>Slides</strong></a>
                                 {% endif %}
