@@ -172,7 +172,12 @@
                             {% endif %}
                             {% if subsect.path == "/presentations/" %}
                             <td>
-                                <a href={{bibitem.tags.url}}  target="_blank">🛝  <strong>Slides</strong></a>
+                                {% if bibitem.tags.slides %}
+                                <a href={{bibitem.tags.slides}}  target="_blank">🛝  <strong>Slides</strong></a>
+                                {% endif %}
+                                {% if bibitem.tags.poster %}
+                                <a href={{bibitem.tags.poster}}  target="_blank">📈 <strong>Poster</strong></a>
+                                {% endif %}
                             </td>
                             {% elif subsect.path == "/conf/" and bibitem.entry_type == "patent" %}
                             <td>
