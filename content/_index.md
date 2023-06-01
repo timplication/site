@@ -6,5 +6,5 @@ insert_anchor_links = "none"
 +++
 
 I started my Ph.D. in October 2021 under the guidance of [Bas Ketsman](http://basketsman.com).
-The focus of my research is database systems and theory, in particular **distributed query
-processing** with **formal guarantees**.
+My research is on the  intersection of database theory and systems, in particular **transaction
+protocols** and **join processing** with **formal guarantees**.
