@@ -1,4 +1,4 @@
 +++
-title = "Publications"
+title = "Academic Contributions"
 weight = 0
 +++

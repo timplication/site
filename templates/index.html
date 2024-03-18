@@ -1,220 +1,198 @@
 {% import "macros.html" as macro %}
 
 <!DOCTYPE html>
-<html lang="{% if page.extra.lang %}{{ page.extra.lang }}{% else %}{{ lang }}{% endif %}" itemscope itemtype="http://schema.org/Blog">
-    <head>
-        <link rel="stylesheet" href="{{ get_url(path="site.css", trailing_slash=false) | safe }}">
-        <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+<html lang="{% if page.extra.lang %}{{ page.extra.lang }}{% else %}{{ lang }}{% endif %}" itemscope
+    itemtype="http://schema.org/Blog">
 
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-        <meta name="description" itemprop="about" content="{{ config.description }}">
-        <meta name="keywords" itemprop="keywords" content="{{ config.extra.keywords }}">
-        <meta name="author" itemprop="author" content="{{ config.extra.author }}">
-        <meta itemprop="headline" content="{{ config.title }}">
-        <meta itemprop="copyrightYear" content="{{ config.extra.year }}">
-    </head>
+<head>
+    <link rel="stylesheet" href="{{ get_url(path="site.css", trailing_slash=false) | safe }}">
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
 
-    <body>
-        <aside>
-            {% block header %}
-            <img src="{{ get_url(path="images/me-250x250.png") }}"
-                 alt="A picture of Tim Baccaert."
-                 width="250" height="250">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="description" itemprop="about" content="{{ config.description }}">
+    <meta name="keywords" itemprop="keywords" content="{{ config.extra.keywords }}">
+    <meta name="author" itemprop="author" content="{{ config.extra.author }}">
+    <meta itemprop="headline" content="{{ config.title }}">
+    <meta itemprop="copyrightYear" content="{{ config.extra.year }}">
+</head>
 
-            <h1>{{ config.title }}</h1>
+<body>
+    <aside>
+        {% block header %}
+        <img src="{{ get_url(path="images/me-250x250.png") }}" alt="A picture of Tim Baccaert." width="250"
+            height="250">
 
+        <h1>{{ config.title }}</h1>
+
+        <table class="one-column">
+            <tr>
+                <td class="title">{{ config.extra.job }}</td>
+            </tr>
+            <tr>
+                <td>{{ config.extra.lab}}</td>
+            </tr>
+            <tr>
+                <td>{{ config.extra.department }}</td>
+            </tr>
+            <tr>
+                <td>{{ config.extra.university }}</td>
+            </tr>
+        </table>
+
+        <table class="two-column">
+            <tr>
+                <td>Email</td>
+                <td>
+                    <a href="mailto:{{config.extra.email}}">
+                        {{config.extra.email}}
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>
+                    <address>{{ config.extra.address }}</address>
+                </td>
+            </tr>
+        </table>
+
+        <p class="description">{{ section.content | safe }}</p>
+
+        <nav class="links">
+            <a class="btn" href="cv.pdf" target="_blank">Curriculum Vitae</a>
+            {% if config.extra.orcid %}
+            <a class="btn" href="https://orcid.org/{{config.extra.orcid}}" target="_blank">ORCID</a>
+            {% endif %}
+            {% if config.extra.github %}
+            <a class="btn" href="https://github.com/{{config.extra.github}}" target="_blank">GitHub</a>
+            {% endif %}
+        </nav>
+        {% endblock header %}
+
+        <footer>
+            <p>{{ config.extra.year }} &copy; <a href="{{ config.base_url }}">{{ config.extra.author }}</a></p>
+        </footer>
+    </aside>
+
+    <main>
+        {% block main %}
+        {% for subsection in section.subsections %}
+        {% set subsect = get_section(path=subsection) %}
+        {% set data_path = "content" ~ subsect.path ~ subsect.components[0] ~ ".bib" %}
+        {% set data = load_data(path=data_path, required=false, format="bibtex") %}
+        {% if data %}
+        <h2>{{ subsect.title }}</h2>
+        {% set bibitems_map = data.bibliographies | group_by(attribute="tags.year") %}
+        {% set_global years = [] %}
+        {% for year, ignored in bibitems_map %}
+        {% set int_year = year | int %}
+        {% set_global years = years | concat(with=int_year) %}
+        {% endfor %}
+        {% if subsect.path != "/services/" %}
+        {% for year in years | sort | reverse %}
+        <h3>{{ year }}</h3>
+        {% set bibitem_by_year = bibitems_map[year] %}
+        {% for bibitem in bibitem_by_year %}
+        <div class="bib-item">
             <table class="one-column">
                 <tr>
-                    <td class="title">{{ config.extra.job }}</td>
+                    <td class="title">
+                        {{bibitem.tags.title }}
+                    </td>
                 </tr>
+                {% if subsect.path is matching("^/(conf|pres).*") and bibitem.entry_type is not
+                matching("patent|article") %}
+                {% if bibitem.tags.eventtitleaddon and bibitem.tags.booktitle %}
                 <tr>
-                    <td>{{ config.extra.lab}}</td>
+                    <td><strong>{{bibitem.tags.eventtitleaddon}}</strong> - {{bibitem.tags.booktitle}}</td>
                 </tr>
+                {% endif %}
                 <tr>
-                    <td>{{ config.extra.department }}</td>
+                    <td>
+                        📍 {{bibitem.tags.venue}} &nbsp; 🗓️
+                        {% for date in bibitem.tags.eventdate | split(pat="/") %}
+                        {% if loop.last %}
+                        {{ date | date(format="%-e %B, %Y") }}
+                        {% else %}
+                        {{ date | date(format="%e →") }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
-                <tr>
-                    <td>{{ config.extra.university }}</td>
-                </tr>
+                {% endif %}
             </table>
 
             <table class="two-column">
+                {% if subsect.path == "/conf/" and bibitem.entry_type == "inproceedings"
+                and bibitem.tags.editor %}
                 <tr>
-                    <td>Email</td>
+                    <td>Editor{{ bibitem.tags.editor | split(pat=", ") | length | pluralize }}</td>
                     <td>
-                        <a href="mailto:{{config.extra.email}}">
-                            {{config.extra.email}}
-                        </a>
+                        {% for editor in bibitem.tags.editor | split(pat=", ") %}
+                        {% set names = editor | trim | split(pat=" ") %}
+                        {{ names | first }},
+                        {{ names | last | truncate(length=1, end=".") }}{%if not loop.last%},{%endif%}
+                        {% endfor %}
                     </td>
                 </tr>
+                {% endif %}
+                {% if bibitem.tags.patentno %}
                 <tr>
-                    <td>Office</td>
-                    <td>{{ config.extra.office }}</td>
+                    <td>Patent No.</td>
+                    <td>{{ bibitem.tags.patentno }}</td>
                 </tr>
+                {% endif %}
+                {% if bibitem.tags.assignee %}
                 <tr>
-                    <td>Address</td>
+                    <td>Assignee</td>
+                    <td>{{ bibitem.tags.assignee }}</td>
+                </tr>
+                {% endif %}
+                {% if bibitem.tags.url or bibitem.tags.slides %}
+                <tr class="links">
+                    {% if bibitem.tags.url and bibitem.tags.slides or bibitem.tags.poster %}
+                    <td>Links</td>
+                    {% else %}
+                    <td>Link</td>
+                    {% endif %}
+                    {% if subsect.path == "/conf/" and bibitem.entry_type == "patent" %}
                     <td>
-                        <address>{{ config.extra.address }}</address>
+                        <a href={{bibitem.tags.url}} target="_blank">📜 <strong>Patent</strong></a>
                     </td>
+                    {% elif subsect.path == "/conf/" and bibitem.entry_type == "inproceedings" %}
+                    <td>
+                        {% if bibitem.tags.url %}
+                        <a href={{bibitem.tags.url}} target="_blank">📄 <strong>Paper</strong></a>
+                        {% endif %}
+                        {% if bibitem.tags.slides %}
+                        <a href={{bibitem.tags.slides}} target="_blank">🛝 <strong>Slides</strong></a>
+                        {% endif %}
+                        {% if bibitem.tags.poster %}
+                        <a href={{bibitem.tags.poster}} target="_blank">📈 <strong>Poster</strong></a>
+                        {% endif %}
+                    </td>
+                    {% endif %}
                 </tr>
+                {% endif %}
             </table>
-
-            <p class="description">{{ section.content | safe }}</p>
-
-            <nav class="links">
-                <a class="btn" href="cv.pdf" target="_blank">Curriculum Vitae</a>
-                {% if config.extra.orcid %}
-                <a class="btn" href="https://orcid.org/{{config.extra.orcid}}" target="_blank">ORCID</a>
-                {% endif %}
-                {% if config.extra.github %}
-                <a class="btn" href="https://github.com/{{config.extra.github}}" target="_blank">GitHub</a>
-                {% endif %}
-            </nav>
-            {% endblock header %}
-
-            <footer>
-                <p>{{ config.extra.year }} &copy; <a href="{{ config.base_url }}">{{ config.extra.author }}</a></p>
-            </footer>
-        </aside>
-
-        <main>
-        {% block main %}
-        {% for subsection in section.subsections %}
-            {% set subsect = get_section(path=subsection) %}
-            {% set data_path = "content" ~ subsect.path ~ subsect.components[0] ~ ".bib" %}
-            {% set data = load_data(path=data_path, required=false, format="bibtex") %}
-            {% if data %}
-            <h2>{{ subsect.title }}</h2>
-            {% set bibitems_map = data.bibliographies | group_by(attribute="tags.year") %}
-            {% set_global years = [] %}
-            {% for year, ignored in bibitems_map %}
-                {% set int_year = year | int %}
-                {% set_global years = years | concat(with=int_year) %}
+        </div>
+        {% endfor %}
+        {% endfor %}
+        {% else %}
+        <table class="two-column teaching">
+            {% for item in data.bibliographies %}
+            <tr>
+                <td>{{ item.tags.year }}</td>
+                <td>{{item.tags.title}}</td>
+            </tr>
             {% endfor %}
-            {% if subsect.path != "/services/" %}
-            {% for year in years | sort | reverse %}
-                <h3>{{ year }}</h3>
-                {% set bibitem_by_year = bibitems_map[year] %}
-                {% for bibitem in bibitem_by_year %}
-                <div class="bib-item">
-                    <table class="one-column">
-                        <tr>
-                            <td class="title">
-                                {{bibitem.tags.title }}
-                            </td>
-                        </tr>
-                        {% if subsect.path is matching("^/(conf|pres).*") and bibitem.entry_type is not matching("patent|article") %}
-                        {% if bibitem.tags.eventtitleaddon and bibitem.tags.booktitle %}
-                        <tr>
-                            <td><strong>{{bibitem.tags.eventtitleaddon}}</strong> - {{bibitem.tags.booktitle}}</td>
-                        </tr>
-                        {% endif %}
-                        <tr>
-                            <td>
-                                📍 {{bibitem.tags.venue}} &nbsp; 🗓️
-                                {% for date in bibitem.tags.eventdate | split(pat="/") %}
-                                    {% if loop.last %}
-                                        {{ date | date(format="%-e %B, %Y") }}
-                                    {% else %}
-                                        {{ date | date(format="%e →") }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        {% endif %}
-                    </table>
-
-                    <table class="two-column">
-                        {% if subsect.path == "/conf/" and bibitem.entry_type == "inproceedings"
-                        and bibitem.tags.editor %}
-                        <tr>
-                            <td>Editor{{ bibitem.tags.editor | split(pat=", ") | length | pluralize }}</td>
-                            <td>
-                                {% for editor in bibitem.tags.editor | split(pat=", ") %}
-                                    {% set names = editor | trim | split(pat=" ") %}
-                                    {{ names | first }},
-                                    {{ names | last | truncate(length=1, end=".") }}{%if not loop.last%},{%endif%}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        {% endif %}
-                        {% if subsect.path != "/presentations/" %}
-                        <tr>
-                            <td>Author{{ bibitem.tags.author | split(pat=", ") | length | pluralize}}</td>
-                            <td>
-                                {% for author in bibitem.tags.author | split(pat=", ") %}
-                                    {% set names = author | trim | split(pat=" ") %}
-                                    {{ names | first }},
-                                    {{ names | last | truncate(length=1, end=".") }}{%if not loop.last%},{%endif%}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        {% endif %}
-                        {% if bibitem.tags.patentno %}
-                        <tr>
-                            <td>Patent No.</td>
-                            <td>{{ bibitem.tags.patentno }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if bibitem.tags.assignee %}
-                        <tr>
-                            <td>Assignee</td>
-                            <td>{{ bibitem.tags.assignee }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if bibitem.tags.url or bibitem.tags.slides %}
-                        <tr class="links">
-                            {% if bibitem.tags.url and bibitem.tags.slides or bibitem.tags.poster %}
-                            <td>Links</td>
-                            {% else %}
-                            <td>Link</td>
-                            {% endif %}
-                            {% if subsect.path == "/presentations/" %}
-                            <td>
-                                {% if bibitem.tags.slides %}
-                                <a href={{bibitem.tags.slides}}  target="_blank">🛝  <strong>Slides</strong></a>
-                                {% endif %}
-                                {% if bibitem.tags.poster %}
-                                <a href={{bibitem.tags.poster}}  target="_blank">📈 <strong>Poster</strong></a>
-                                {% endif %}
-                            </td>
-                            {% elif subsect.path == "/conf/" and bibitem.entry_type == "patent" %}
-                            <td>
-                                <a href={{bibitem.tags.url}}  target="_blank">📜 <strong>Patent</strong></a>
-                            </td>
-                            {% elif subsect.path == "/conf/" and bibitem.entry_type == "inproceedings" %}
-                            <td>
-                                {% if bibitem.tags.url %}
-                                <a href={{bibitem.tags.url}}  target="_blank">📄 <strong>Paper</strong></a>
-                                {% endif %}
-                                {% if bibitem.tags.slides %}
-                                <a href={{bibitem.tags.slides}}  target="_blank">🛝  <strong>Slides</strong></a>
-                                {% endif %}
-                                {% if bibitem.tags.poster %}
-                                <a href={{bibitem.tags.poster}}  target="_blank">📈 <strong>Poster</strong></a>
-                                {% endif %}
-                            </td>
-                            {% endif %}
-                        </tr>
-                        {% endif %}
-                    </table>
-                </div>
-                {% endfor %}
-            {% endfor %}
-            {% else %}
-                <table class="two-column teaching">
-                {% for item in data.bibliographies %}
-                    <tr>
-                        <td>{{ item.tags.year }}</td>
-                        <td>{{item.tags.title}}</td>
-                    </tr>
-                {% endfor %}
-                </table>
-            {% endif %}
-            {% endif %}
+        </table>
+        {% endif %}
+        {% endif %}
         {% endfor %}
         {% endblock main %}
-        </main>
-    </body>
+    </main>
+</body>
+
 </html>

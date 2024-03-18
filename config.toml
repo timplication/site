@@ -21,13 +21,12 @@ highlight_code = true
 # Put all your custom variables here
 keywords = ""
 author = "Tim Baccaert"
-year = 2023
+year = 2024
 job = "Ph.D. Student"
 lab = "Software Languages Lab"
 department = "Department of Computer Science"
 university = "Vrije Universiteit Brussel"
 email = "tim.baccaert@vub.be"
 address = "Pleinlaan 2, 1050 Brussels, Belgium"
-office = "F.10.735"
 github = "timplication"
 orcid = "0000-0002-7115-204X"
