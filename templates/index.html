@@ -131,8 +131,20 @@
                     <td>
                         {% for editor in bibitem.tags.editor | split(pat=", ") %}
                         {% set names = editor | trim | split(pat=" ") %}
-                        {{ names | first }},
+                        {{ names | first }}
                         {{ names | last | truncate(length=1, end=".") }}{%if not loop.last%},{%endif%}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endif %}
+                {% if subsect.path == "/conf/" %}
+                <tr>
+                    <td>Author{{ bibitem.tags.author | split(pat=", ") | length | pluralize}}</td>
+                    <td>
+                        {% for author in bibitem.tags.author | split(pat=", ") %}
+                           {% set names = author | trim | split(pat=" ") %}
+                                {{ names | first }}
+                                {{ names | last | truncate(length=1, end=".") }}{%if not loop.last%},{%endif%}
                         {% endfor %}
                     </td>
                 </tr>
