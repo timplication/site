@@ -52,6 +52,7 @@
                 <h2>
                     {{
                         entry_type | replace(from="inproceedings", to="Conference Papers")
+                                   | replace(from="journal", to="Journal Papers")
                                    | replace(from="patent", to="Patents")
                                    | replace(from="workshop", to="Workshop Papers")
                     }}
@@ -81,6 +82,9 @@
                             {% endif %}
                             {% if item.tags.poster %}
                                 <a href={{ item.tags.poster }} target="_blank">📌 Poster</a>
+                            {% endif %}
+                            {% if item.tags.artifact %}
+                                <a href={{ item.tags.artifact}} target="_blank">💾 Artifact</a>
                             {% endif %}
                         </div>
                         {% endif %}
