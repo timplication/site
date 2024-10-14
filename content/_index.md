@@ -1,16 +1,19 @@
 +++
-paginate_by = 20
-sort_by = "date"
-sort_direction = "decending"
-insert_anchor_links = "none"
 +++
 
-I started my Ph.D. in October 2021 under the guidance of
-[Prof. Dr. Bas Ketsman](http://basketsman.com), at the Vrije Universiteit Brussel (VUB). Some
-of the topics I have worked on include coordination-freedom in distributed
-systems (CALM), distributed worst-case optimal joins, and optimal transaction
-scheduling.
+Hi, nice to meet you. I am a PhD student in computer science, and my research
+is about keeping shared state consistent in both concurrent and distributed
+systems. You may know me from my contributions to the [CALM
+theorem](https://cris.vub.be/ws/portalfiles/portal/97428175/dcbq.pdf), and
+my work on [transaction
+scheduling](https://ieeexplore.ieee.org/document/10597797). I enjoy combining
+theoretical computer science with databases and systems programming. My hope is that the ideas
+I contribute to make your job as a wrangler of flickering lights more enjoyable.
 
-Prior to being a Ph.D. student, I did an internship at [IBM Research
-Zürich](https://www.zurich.ibm.com/ics/) in the group of [Dr.
-Staar](https://research.ibm.com/people/peter-staar).
+I am enrolled in a PhD program at the Software Languages Lab of the Vrije
+Universiteit Brussel, where I am advised by [Bas
+Ketsman](http://basketsman.com). Currently, I am on a 3-month research visit
+at UC Berkeley's Sky Lab, where I work together
+with [Joseph M. Hellerstein](https://dsf.berkeley.edu/jmh/).
+Before my PhD, I completed a 6-month internship at IBM's Research Lab in
+Zürich under the guidance of [Peter Staar](https://research.ibm.com/people/peter-staar).
