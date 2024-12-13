@@ -14,6 +14,6 @@ I am enrolled in a PhD program at the Software Languages Lab of the Vrije
 Universiteit Brussel, where I am advised by [Bas
 Ketsman](http://basketsman.com). In the context of my PhD I did a 3-month research visit
 at UC Berkeley, where I worked together
-with [Joseph M. Hellerstein](https://dsf.berkeley.edu/jmh/).
+with [Joe Hellerstein](https://dsf.berkeley.edu/jmh/).
 Before my PhD, I completed a 6-month internship at IBM's Research Lab in
 Zürich under the guidance of [Peter Staar](https://research.ibm.com/people/peter-staar).
